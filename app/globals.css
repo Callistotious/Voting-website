@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: rgba(233, 199, 123, 0.18);
+}
+
+::selection {
+  background: #D9B35E;
+  color: #0A0E1A;
+}
+
+:focus-visible {
+  outline: 2px solid #E9C77B;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* A hairline double rule, used as the "ballot" divider motif instead of
+   generic cards/shadows. Appears under the masthead and above tallies. */
+.ballot-rule {
+  height: 5px;
+  background-image: linear-gradient(#E9C77B, #E9C77B), linear-gradient(#E9C77B, #E9C77B);
+  background-size: 100% 1px;
+  background-position: top, bottom;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+}
+
+.seal {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"] {
+  background: #121A33;
+  border: 1px solid rgba(233, 199, 123, 0.3);
+  color: #F3EFE6;
+}
+
+input::placeholder {
+  color: #6B7390;
+}
