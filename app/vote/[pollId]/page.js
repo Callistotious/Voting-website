@@ -188,7 +188,7 @@ export default function VotePage({ params }) {
         )}
       </div>
        <p className="text-center text-[11px] tracking-wide text-ivory/30 mt-12">
-        Callisto's voting platform
+        Callisto's voting platform <br/>-- Crevin made this🙂 -- 
       </p>
     </main>
   );
