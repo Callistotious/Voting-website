@@ -4,20 +4,18 @@ import { useEffect, useState } from "react";
 export default function ResultsPage({ params }) {
   const { pollId } = params;
   const [state, setState] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function load() {
+    setRefreshing(true);
+    const res = await fetch(`/api/results/${pollId}`);
+    const data = await res.json();
+    setState(data);
+    setRefreshing(false);
+  }
 
   useEffect(() => {
-    let active = true;
-    async function load() {
-      const res = await fetch(`/api/results/${pollId}`);
-      const data = await res.json();
-      if (active) setState(data);
-    }
     load();
-    const interval = setInterval(load, 10000);
-    return () => {
-      active = false;
-      clearInterval(interval);
-    };
   }, [pollId]);
 
   if (!state) {
@@ -44,7 +42,16 @@ export default function ResultsPage({ params }) {
     <main className="min-h-screen px-6 py-16 flex flex-col items-center">
       <div className="w-full max-w-lg">
         <p className="seal text-gold-500 text-base tracking-wide text-center mb-2">Medsam</p>
-        <h1 className="font-display text-3xl italic text-center mb-10">{state.pollName}</h1>
+        <h1 className="font-display text-3xl italic text-center mb-6">{state.pollName}</h1>
+        <div className="flex justify-center mb-10">
+          <button
+            onClick={load}
+            disabled={refreshing}
+            className="text-xs px-3 py-1.5 border border-gold-500/30 hover:border-gold-500/60 transition-colors disabled:opacity-50"
+          >
+            {refreshing ? "Refreshing…" : "Refresh results"}
+          </button>
+        </div>
         <div className="space-y-10">
           {state.tally.map(({ category, nominees }) => {
             const max = Math.max(1, ...nominees.map((n) => n.votes));

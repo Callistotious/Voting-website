@@ -379,12 +379,57 @@ function VotersTab({ pollId }) {
 
 function ResultsTab({ pollId }) {
   const [tally, setTally] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function load() {
+    setRefreshing(true);
     const res = await fetch(`/api/admin/polls/${pollId}/results`);
     const data = await res.json();
     setTally(data.tally);
+    setRefreshing(false);
   }
+
+  useEffect(() => {
+    load();
+  }, [pollId]);
+
+  if (!tally) return <p className="text-sm text-ivory/50">Loading…</p>;
+
+  return (
+    <div className="max-w-2xl space-y-10">
+      <button
+        onClick={load}
+        disabled={refreshing}
+        className="text-xs px-3 py-1.5 border border-cyan-500/30 hover:border-cyan-500/60 transition-colors disabled:opacity-50"
+      >
+        {refreshing ? "Refreshing…" : "Refresh results"}
+      </button>
+      {tally.length === 0 && <p className="text-sm text-ivory/50">Add categories and nominees to see live counts here.</p>}
+      {tally.map(({ category, nominees }) => {
+        const max = Math.max(1, ...nominees.map((n) => n.votes));
+        return (
+          <div key={category.id}>
+            <h3 className="font-display text-lg mb-3">{category.name}</h3>
+            <div className="space-y-2">
+              {nominees.map((n) => (
+                <div key={n.id}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>{n.name}</span>
+                    <span className="text-ivory/50">{n.votes}</span>
+                  </div>
+                  <div className="h-1.5 bg-midnight-700">
+                    <div className="h-1.5 bg-cyan-500" style={{ width: `${(n.votes / max) * 100}%` }} />
+                  </div>
+                </div>
+              ))}
+              {nominees.length === 0 && <p className="text-xs text-ivory/40">No nominees in this category.</p>}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
   useEffect(() => {
     load();
