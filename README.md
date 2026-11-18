@@ -135,3 +135,4 @@ Service Status *is* the leverage, and it's the same one described there.
   file-upload widget — works fine, just not drag-and-drop yet.
 - No automated nightly backup/export job — see Section 4 of the Terms doc for
   why that matters; wire one up before running this for a paying client.
+- The voter delete feature is a bad thing that should be kept away from the normal admin*** To remove it on a later date(actual medsam elections).
