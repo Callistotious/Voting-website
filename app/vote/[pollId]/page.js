@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function VotePage({ params }) {
   const { pollId } = params;
+  const [checkingStatus, setCheckingStatus] = useState(true);
+  const [suspended, setSuspended] = useState(false);
+  const [suspensionMessage, setSuspensionMessage] = useState("");
   const [step, setStep] = useState("email");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -11,6 +14,7 @@ export default function VotePage({ params }) {
   const [pollName, setPollName] = useState("");
   const [categories, setCategories] = useState([]);
   const [selections, setSelections] = useState({});
+  
 
   async function requestCode(e) {
   e.preventDefault();
@@ -83,6 +87,21 @@ export default function VotePage({ params }) {
     setLoading(false);
     if (!res.ok) return setError(data.error);
     setStep("done");
+  }
+
+  if (checkingStatus) {
+    return <main className="min-h-screen flex items-center justify-center text-ivory/50 text-sm">Loading…</main>;
+  }
+
+  if (suspended) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
+        <p className="seal text-gold-500 text-base tracking-wide mb-4">Medsam</p>
+        <div className="ballot-rule w-24 mb-8" />
+        <h1 className="font-display text-3xl italic mb-4">Hold tight ✨</h1>
+        <p className="text-sm text-ivory/70 whitespace-pre-line max-w-md">{suspensionMessage}</p>
+      </main>
+    );
   }
 
   return (

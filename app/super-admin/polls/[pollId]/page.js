@@ -86,6 +86,8 @@ function OverviewTab({ poll, pollId, onChange, setNotice }) {
     onChange();
   }
 
+  const [msgDraft, setMsgDraft] = useState(poll.suspension_message || "");
+
   return (
     <div className="space-y-8 max-w-xl">
       <div>
@@ -104,6 +106,24 @@ function OverviewTab({ poll, pollId, onChange, setNotice }) {
           ))}
         </div>
         <p className="text-xs text-ivory/40 mt-2">Voters can only reach the ballot while this is "open".</p>
+      </div>
+
+      <div className="pt-4 border-t border-cyan-500/10">
+        <label className="block text-sm mb-2">Suspension message</label>
+        <p className="text-xs text-ivory/40 mb-2">Shown to voters instead of the ballot whenever voting isn't "open".</p>
+        <textarea
+          value={msgDraft}
+          onChange={(e) => setMsgDraft(e.target.value)}
+          rows={3}
+          placeholder="Callisto says voting has been paused for a bit — hang tight, it'll resume soon 💫"
+          className="w-full px-3 py-2 text-sm"
+        />
+        <button
+          onClick={() => patch({ suspensionMessage: msgDraft })}
+          className="mt-2 text-sm px-4 py-2 border border-cyan-500/30 hover:border-cyan-500/60 transition-colors"
+        >
+          Save message
+        </button>
       </div>
 
       <div className="flex items-center justify-between py-4 border-t border-gold-500/10">

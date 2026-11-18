@@ -24,7 +24,8 @@ export async function PATCH(request, { params }) {
     voting_status: body.votingStatus ?? poll.voting_status,
     otp_required: body.otpRequired !== undefined ? !!body.otpRequired : poll.otp_required,
     results_public: body.resultsPublic !== undefined ? !!body.resultsPublic : poll.results_public,
-    open_voting: body.openVoting !== undefined ? !!body.openVoting : (poll.open_voting ?? false)
+    open_voting: body.openVoting !== undefined ? !!body.openVoting : (poll.open_voting ?? false),
+    suspension_message: body.suspensionMessage !== undefined ? body.suspensionMessage : (poll.suspension_message || "")
   };
 
   if (!["draft", "open", "closed"].includes(next.voting_status)) {
