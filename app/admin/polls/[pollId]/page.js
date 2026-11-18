@@ -134,43 +134,6 @@ function OverviewTab({ poll, pollId, onChange, setNotice }) {
         Voter link to share once OTP + voting status are set: <br />
         <code className="text-gold-400">{"/vote/" + pollId}</code>
       </div>
-
-      <div className="mt-16 pt-8 border-t border-red-500/20">
-        <p className="text-sm text-red-400 font-medium mb-1">Danger zone</p>
-        <p className="text-xs text-ivory/40 mb-4">These actions can't be undone.</p>
-        <div className="flex gap-3">
-          <button
-            onClick={async () => {
-              if (!window.confirm("This erases every vote and resets all voters to not-yet-voted. Continue?")) return;
-              const res = await fetch(`/api/admin/polls/${pollId}/reset-votes`, { method: "POST" });
-              if (res.ok) {
-                setNotice("All votes have been reset.");
-                onChange();
-              } else {
-                setNotice((await res.json()).error || "Couldn't reset votes.");
-              }
-            }}
-            className="text-sm px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-colors"
-          >
-            Reset all votes
-          </button>
-          <button
-            onClick={async () => {
-              if (!window.confirm("This permanently deletes this poll and everything in it. Continue?")) return;
-              const res = await fetch(`/api/admin/polls/${pollId}`, { method: "DELETE" });
-              if (res.ok) {
-                window.location.href = "/admin/dashboard";
-              } else {
-                setNotice((await res.json()).error || "Couldn't delete poll.");
-              }
-            }}
-            className="text-sm px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-colors"
-          >
-            Delete poll
-          </button>
-        </div>
-      </div>
-
     </div>
   );
 }
